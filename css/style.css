@@ -80,17 +80,78 @@ select {
     border: 1px solid #0000000d;
 }
 
+.section-wrapper {
+    position: relative;
+    display: block;
+    overflow: hidden;
+}
+
+.section-item:nth-of-type(even) .section-wrapper::before {
+    display: inline-flex;
+    justify-content: center;
+    align-items: end;
+    padding: 20px 10px 6px 30px;
+
+    content: '\f0e7';
+    width: 140px;
+    height: 100px;
+    background: var(--primary);
+
+    font-family: 'Font Awesome 5 Free';
+    font-weight: 800;
+    font-size: 1.8rem;
+    color: #fff;
+
+    position: absolute;
+    top: -89px;
+    right: -85px;
+    z-index: 2;
+    transform: rotate(35deg);
+}
+
+.section-item .product-wrapper.section-wrapper::before {
+    display: none;
+}
+
 .section-thumb {
     display: block;
     width: 100%;
     height: 100%;
     object-fit: cover;
+
+    transition: transform 0.6s ease;
 }
+
+.section-thumb:hover {
+    transform: scale(1.2);
+}
+
+.section-item:hover .section-thumb {
+    transform: scale(1.2);
+}
+
 .section-info {
     flex: 1;
     display: flex;
     flex-direction: column;
 }
+
+.btn {
+    --height: 32px;
+
+    min-width: 66px;
+    height: var(--height);
+    padding: 0 8px;
+    border-radius: 30px;
+
+    color: var(--white);
+    line-height: var(--height);
+    text-align: center;
+    text-decoration: none;
+    cursor: pointer;
+}
+
+/* End Common Section */
 
 /* Index Menu */
 .main-container {
@@ -166,7 +227,11 @@ select {
     display: flex;
 }
 
-.nav a {
+.nav > li {
+    position: relative;
+}
+
+.nav > li > a {
     display: inline-block;
     padding: 20px;
     color: var(--white);
@@ -177,6 +242,61 @@ select {
     font-weight: 700;
     letter-spacing: 1.1px;
 }
+
+.nav li:hover .submenu {
+    display: block;
+}
+
+/* Submenu */
+.submenu {
+    position: absolute;
+    top: 50px;
+    left: 0;
+
+    min-width: 220px;
+    background: var(--white);
+
+    opacity: 0;
+    visibility: hidden;
+    overflow: hidden;
+    transform: scaleY(0);
+    transform-origin: top center;
+    transition: opacity 0.5s ease, visibility 0.5s ease, transform 0.5s ease;
+}
+
+/*  The below css use as invisible bridge between li & submenu when hover. 
+    DON'T NEED FOR THIS CASE BECAUSE PADDING OF li tag, WHICH CONTAINS SUBMENU IS LARGE ENOUGH */
+/* .submenu::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: -14px;
+    height: 20px;
+    width: 100%;
+} */
+
+.submenu a {
+    display: flex;
+    align-items: center;
+    height: 44px;
+    padding: 0 25px;
+    text-decoration: none;
+    color: #0009;
+}
+
+/* Show submenu when hovering li */
+.nav > li:hover .submenu {
+    opacity: 1;
+    visibility: visible;
+    transform: scaleY(1);
+}
+
+/* Submenu hover effect */
+.submenu a:hover {
+    background: var(--primary);
+    color: var(--white);
+}
+/* End submenu */
 
 .action-wrapper {
     display: flex;
@@ -261,6 +381,9 @@ h1.heading {
 }
 
 .menu a {
+    position: relative; /* need to create motion for side menu when hover */
+    left: 0;
+
     display: flex;
     align-items: center;
     height: 40px;
@@ -268,10 +391,12 @@ h1.heading {
 
     text-decoration: none;
     color: #000000b3;
+    transition: color ease 0.3s, left linear 0.3s;
 }
 
 .menu a:hover {
     color: var(--secondary);
+    left: 6px;
 }
 
 .main-content {
@@ -292,6 +417,8 @@ h1.heading {
     border-radius: 15px;
     text-decoration: none;
     line-height: 30px;
+
+    transition: color 0.3s linear, background 0.3s linear;
 }
 
 .topics .active a,
@@ -301,9 +428,7 @@ h1.heading {
 }
 
 /* Course list */
-
 .thumb-wrapper {
-    display: block;
     aspect-ratio: 1 / 0.8;
 }
 
@@ -319,6 +444,7 @@ h1.heading {
 
     display: -webkit-box;
     -webkit-line-clamp: 2;
+    line-clamp: 2;
     -webkit-box-orient: vertical;
     overflow: hidden;
 }
@@ -348,30 +474,58 @@ h1.heading {
     object-fit: cover;
 }
 
-.btn {
-    --height: 32px;
-
-    min-width: 66px;
-    height: var(--height);
-    padding: 0 8px;
-    border-radius: 30px;
-
-    color: var(--white);
-    line-height: var(--height);
-    text-align: center;
-    text-decoration: none;
-    cursor: pointer;
-}
-
 .course-btn {
+    position: relative;
+
     margin-left: auto;
     background: var(--secondary);
+
+    transition: transform 0.5s ease;
+}
+
+.course-btn:hover {
+    transform: translateY(-5px);
+}
+
+.course-btn::after {
+    content: '';
+    position: absolute;
+    top: 120%;
+    left: 5%;
+
+    width: 90%;
+    height: 10px;
+    background: radial-gradient(
+        ellipse at center,
+        rgba(0, 0, 0, 0.35) 0%,
+        rgba(0, 0, 0, 0) 80%
+    );
+
+    opacity: 0;
+    transform: scale(0.8); /* Start smaller */
+    transition: transform 0.3s ease, opacity 0.3s ease;
+}
+
+.course-btn:hover::after {
+    opacity: 1;
+    transform: scale(1); /* Grow smoothly */
 }
 
 .course-primary {
     margin-left: auto;
     font-weight: 700;
     background: var(--primary);
+}
+
+/* Messenger */
+.messenger-chat img {
+    position: fixed;
+    right: 28px;
+    bottom: 250px;
+
+    width: 60px;
+    height: 60px;
+    object-fit: contain;
 }
 
 /* Pagination */
@@ -401,6 +555,9 @@ h1.heading {
     color: #0000004d;
     border: 1px solid rgba(0, 0, 0, 0.2);
     border-radius: 8px;
+
+    transition: color 0.3s linear, border-color 0.3s linear,
+        background 0.3s linear;
 }
 
 .pagination-btn:hover {
@@ -433,15 +590,22 @@ h1.heading {
     gap: 30px;
 }
 
-.footer-column:first-child,
-.footer-column:last-child {
-    max-width: 270px;
+.footer-column + .footer-column {
+    flex: 1;
+}
+
+.footer-column:first-of-type,
+.footer-column:last-of-type {
     font-size: 1.4rem;
     line-height: 1.57;
 }
 
-.footer-column + .footer-column {
-    flex: 1;
+.footer-column:first-of-type {
+    flex-basis: 23%;
+}
+
+.footer-column:last-of-type {
+    flex-basis: 7%;
 }
 
 .footer-desc {
@@ -470,6 +634,7 @@ h1.heading {
     font-size: 1.5rem;
     line-height: 2;
     text-decoration: none;
+    transition: color 0.5s linear;
 }
 
 .footer-list li a:hover {
@@ -497,6 +662,7 @@ h1.heading {
 .btn-send {
     --height: 40px;
 
+    position: relative;
     min-width: 95px;
     margin-top: 10px;
 
@@ -505,6 +671,32 @@ h1.heading {
     color: var(--white);
     background: var(--primary);
     border-radius: 20px;
+    overflow: hidden; /* prevent ::after from overflowing */
+
+    transition: color 0.5s ease, background 0.5s ease;
+    z-index: 0;
+}
+
+.btn-send::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: #fff;
+    border-radius: 30px;
+
+    transform: scale(0);
+    transform-origin: center;
+    transition: transform 0.5s ease;
+    z-index: -1; /* behind the text */
+}
+
+.btn-send:hover {
+    color: var(--primary);
+    background: var(--white);
+}
+
+.btn-send:hover::after {
+    transform: scale(1.1);
 }
 
 /* Shop */
@@ -563,6 +755,7 @@ h1.heading {
 
 .shop-menu a:hover {
     color: var(--primary);
+    transition: color 0.5s linear;
 }
 
 .menu-products-popular {
@@ -594,6 +787,8 @@ h1.heading {
 .product-label-popular a {
     font-size: 1.8rem;
     text-decoration: none;
+
+    transition: color 0.5s linear;
 }
 
 .product-label-popular a:hover {
@@ -613,7 +808,17 @@ h1.heading {
     align-items: center;
 }
 
-.filter-form {
+.filter-inner {
+    position: relative;
+    cursor: pointer;
+}
+
+.filter-inner:hover .filter-list {
+    opacity: 1;
+    visibility: visible;
+}
+
+.filter-group {
     display: flex;
     align-items: center;
 
@@ -621,7 +826,7 @@ h1.heading {
     border: 1px solid #00000017;
 }
 
-.filter-input {
+.filter-label {
     flex: 1;
     border: none;
     outline: none;
@@ -630,10 +835,50 @@ h1.heading {
     padding-left: 15px;
 
     font-size: 1.6rem;
+    color: #6f6f6f;
 }
 
 .btn-chevron-down {
     padding-right: 15px;
+}
+
+.filter-list {
+    position: absolute;
+    z-index: 2;
+    bottom: -161px;
+    left: 0;
+    width: 100%;
+
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.2s linear, visibility 0.2s linear;
+}
+
+.filter-list::before {
+    content: '';
+    display: block;
+    padding: 20px 0;
+}
+
+.filter-list li a {
+    background: var(--white);
+    display: inline-block;
+    width: 100%;
+    height: 40px;
+    padding: 0 20px;
+
+    font-size: 1.6rem;
+    color: var(--black);
+    line-height: 40px;
+    text-decoration: none;
+
+    transition: color 0.1s linear, background 0.1s linear;
+}
+
+.filter-list li a:hover,
+.filter-list li a.active {
+    color: var(--white);
+    background: var(--primary);
 }
 
 .row-text {
@@ -643,7 +888,6 @@ h1.heading {
 }
 
 .product-wrapper {
-    display: block;
     aspect-ratio: 1 / 0.9;
 }
 
@@ -664,10 +908,40 @@ h1.heading {
 .btn-add {
     --height: 40px;
 
+    position: relative;
+
     min-width: 130px;
     font-size: 1.5rem;
     font-weight: 600;
     background: var(--primary);
+
+    transition: transform 0.5s ease;
+}
+
+.btn-add:hover {
+    transform: translateY(-5px);
+}
+
+.btn-add::after {
+    content: '';
+    position: absolute;
+    top: 120%;
+    left: 5%;
+    width: 90%;
+    height: 10px;
+    background: radial-gradient(
+        ellipse at center,
+        rgba(0, 0, 0, 0.35) 0%,
+        rgba(0, 0, 0, 0) 80%
+    );
+    opacity: 0;
+    transform: scale(0.8); /* Start smaller */
+    transition: transform 0.3s ease, opacity 0.3s ease;
+}
+
+.btn-add:hover::after {
+    opacity: 1;
+    transform: scale(1); /* Grow smoothly */
 }
 
 .product-pagination {
@@ -688,6 +962,8 @@ h1.heading {
     color: var(--white);
     background: var(--primary);
     text-decoration: none;
+
+    transition: background 0.3s linear;
 }
 
 .product-pagination-btn:hover {
