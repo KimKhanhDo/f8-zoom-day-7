@@ -276,12 +276,17 @@ select {
 } */
 
 .submenu a {
+    position: relative;
     display: flex;
     align-items: center;
+
     height: 44px;
     padding: 0 25px;
-    text-decoration: none;
+
+    font-size: 1.6rem;
     color: #0009;
+    text-decoration: none;
+    transition: all 0.3s ease-in-out;
 }
 
 /* Show submenu when hovering li */
@@ -293,8 +298,9 @@ select {
 
 /* Submenu hover effect */
 .submenu a:hover {
-    background: var(--primary);
+    padding-left: 29px;
     color: var(--white);
+    background: var(--primary);
 }
 /* End submenu */
 
